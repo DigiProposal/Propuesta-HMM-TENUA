@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta HMM Global para Tenua</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            background-color: #2c6b66; /* Verde azulado oscuro para el fondo del banner */
+        }
+        .section-title {
+            @apply text-3xl font-bold text-gray-800 mb-6 text-center;
+        }
+        .subsection-title {
+            @apply text-2xl font-semibold text-[#5cc4bc] mb-4 mt-6; /* Color primario para subtítulos */
+        }
+        .card {
+            @apply bg-white shadow-xl rounded-lg p-6 md:p-8 transition-shadow duration-300 hover:shadow-2xl;
+        }
+        .list-disc li {
+            @apply mb-2;
+        }
+        .primary-button {
+            @apply bg-[#5cc4bc] hover:bg-[#4aa9a1] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5; /* Color primario para botones */
+        }
+        nav a {
+            @apply text-gray-600 hover:text-[#5cc4bc] px-3 py-2 rounded-md text-sm font-medium transition-colors; /* Color primario para hover en nav */
+        }
+        .logo-container img {
+            max-height: 60px; /* Ajustar altura máxima de logos */
+            width: auto;
+        }
+        .nav-logo {
+             max-height: 40px; /* Altura específica para el logo en la nav */
+             width: auto;
+        }
+        .section-bg-neutral-light {
+            background-color: #f7f7f7; /* Gris muy claro para fondos de sección */
+        }
+        .text-neutral-main {
+            color: #9c9c9c; /* Color secundario/neutro para texto */
+        }
+        .text-neutral-darker {
+            color: #777777; /* Un gris un poco más oscuro para legibilidad */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-700">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="https://ik.imagekit.io/50wnllxkw/Logo%20HMM.png?updatedAt=1748999183605" alt="Logo HMM Global" class="nav-logo">
+                    <!-- Se eliminó el texto "HMM Global" de aquí -->
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#resumen">Resumen</a>
+                        <a href="#necesidades">Necesidades</a>
+                        <a href="#propuesta-valor">Propuesta</a>
+                        <a href="#metodologia">Metodología</a>
+                        <a href="#modelo-comercial">Modelo</a>
+                        <a href="#beneficios">Beneficios</a>
+                        <a href="#acerca-de">Acerca de</a>
+                        <a href="#contacto">Contacto</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#resumen" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Resumen</a>
+                <a href="#necesidades" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Necesidades</a>
+                <a href="#propuesta-valor" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Propuesta</a>
+                <a href="#metodologia" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Metodología</a>
+                <a href="#modelo-comercial" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Modelo</a>
+                <a href="#beneficios" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Beneficios</a>
+                <a href="#acerca-de" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Acerca de</a>
+                <a href="#contacto" class="block text-gray-600 hover:text-[#5cc4bc] hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECCIÓN 0: PORTADA / PÁGINA DE INICIO -->
+    <header class="hero-bg py-16 md:py-24 text-white"> <!-- Texto blanco para contraste con fondo oscuro -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center items-center space-x-8 mb-8 logo-container">
+                <img src="https://ik.imagekit.io/50wnllxkw/Logo%20HMM.png?updatedAt=1748999183605" alt="[Imagen del Logo de HMM Global]" class="h-16 md:h-20" onerror="this.onerror=null;this.src='https://placehold.co/150x60/2c6b66/FFFFFF?text=Logo+HMM';">
+                <span class="text-4xl text-gray-300">+</span> <!-- Color claro para el '+' -->
+                <img src="https://ik.imagekit.io/50wnllxkw/Recurso-2fastx.png?updatedAt=1748996121775" alt="[Imagen del Logo de Tenua]" class="h-16 md:h-20" onerror="this.onerror=null;this.src='https://placehold.co/150x60/2c6b66/FFFFFF?text=Logo+Tenua';">
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                Propuesta de Colaboración Estratégica:
+            </h1>
+            <h2 class="text-2xl md:text-3xl font-semibold text-[#5cc4bc] mb-6"> <!-- El subtítulo ya usa el color primario #5cc4bc, que contrastará bien -->
+                Gestión Integral para Servicios de Fisioterapia Domiciliaria a Pacientes Geriátricos de Axa.
+            </h2>
+            <p class="text-xl text-gray-200 mb-10"> <!-- Texto gris claro -->
+                HMM Global y Tenua: Uniendo fuerzas para optimizar la atención y la rentabilidad.
+            </p>
+            <div class="text-sm text-gray-300 mb-4"> <!-- Texto gris más claro -->
+                <p><strong>Dirigido a:</strong> Dr. Juan Osorio, Líder de Tenua.</p>
+                <p><strong>Preparado por:</strong> HMM Global</p>
+                <p><strong>Fecha:</strong> 4 de junio de 2025</p>
+            </div>
+            <a href="#resumen" class="primary-button text-lg">
+                Descubra Cómo
+            </a>
+        </div>
+    </header>
+
+    <!-- SECCIÓN 1: RESUMEN EJECUTIVO -->
+    <section id="resumen" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Resumen Ejecutivo</h2>
+                <p class="text-lg mb-4">Presentamos una propuesta de colaboración entre <strong>Tenua</strong> y <strong>HMM Global</strong> para proveer servicios de fisioterapia domiciliaria de alta calidad a pacientes geriátricos de Axa. Reconocemos la complejidad administrativa, de facturación y operativa inherente al trabajo con grandes aseguradoras, y la necesidad de Tenua de enfocarse en la excelencia asistencial.</p>
+                <p class="text-lg mb-4"><strong>La solución de HMM Global</strong> es un servicio integral que abarca la gestión de facturación y reclamos a Axa, un software avanzado para el control de operaciones y visitas, y nuestro valioso <em>know-how</em> derivado de experiencias previas exitosas con Axa.</p>
+                <p class="text-lg font-semibold mb-2 text-[#5cc4bc]">Beneficios clave para Tenua:</p>
+                <ul class="list-disc pl-5 mb-4 space-y-1 text-lg">
+                    <li>Concentración total en la fisioterapia de alta calidad.</li>
+                    <li>Reducción significativa de la carga administrativa.</li>
+                    <li>Optimización de la eficiencia operativa y tecnológica.</li>
+                    <li>Mayor probabilidad de éxito y rentabilidad en el proyecto con Axa.</li>
+                </ul>
+                <p class="text-lg mb-6">HMM Global opera bajo un modelo de éxito compartido, percibiendo un 70% de la utilidad bruta del proyecto, alineando nuestros intereses con los de Tenua.</p>
+                <p class="text-lg text-center">Le invitamos a explorar en detalle cómo podemos transformar este desafío en una oportunidad de crecimiento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: ENTENDIMIENTO DE SUS NECESIDADES Y OBJETIVOS -->
+    <section id="necesidades" class="py-12 md:py-20 section-bg-neutral-light">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Entendimiento de Sus Necesidades y Objetivos</h2>
+                <p class="text-lg mb-4">Entendemos que Tenua, como proveedor especializado en fisioterapia, busca expandir sus servicios a la importante cartera de pacientes geriátricos de Axa. Reconocemos los desafíos que esto implica, tales como:</p>
+                <ul class="list-disc pl-5 mb-4 space-y-2 text-lg">
+                    <li>La gestión eficiente y precisa de la facturación y los complejos procesos de reclamos con Axa.</li>
+                    <li>La necesidad de una coordinación logística impecable para las visitas domiciliarias.</li>
+                    <li>El requerimiento de mantener altos estándares de calidad y cumplimiento normativo exigidos por Axa.</li>
+                    <li>El deseo de minimizar la carga administrativa para que el equipo de Tenua pueda centrarse en la atención al paciente.</li>
+                    <li>La aspiración de asegurar la rentabilidad y sostenibilidad del proyecto.</li>
+                </ul>
+                <p class="text-lg font-medium text-center text-[#5cc4bc]">"Nuestro objetivo es alinear nuestros servicios para ayudar a Tenua a superar estos desafíos y alcanzar sus metas de crecimiento y excelencia en el servicio."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: NUESTRA PROPUESTA DE VALOR Y SOLUCIÓN INTEGRAL -->
+    <section id="propuesta-valor" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title">Nuestra Propuesta de Valor y Solución Integral</h2>
+            
+            <div class="card mb-12">
+                <h3 class="subsection-title">3.1 Propuesta de Valor Específica para Tenua</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-lg">
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Enfoque en la Atención al Paciente:</h4>
+                        <p>"Permitimos que Tenua se dedique 100% a lo que mejor sabe hacer: brindar fisioterapia excepcional. Nosotros nos encargamos del resto."</p>
+                    </div>
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Experiencia Comprobada con Axa:</h4>
+                        <p>"Navegamos por usted los procesos de Axa. Nuestra experiencia previa minimiza la curva de aprendizaje y maximiza la eficiencia desde el día uno."</p>
+                    </div>
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Eficiencia Operativa y Tecnológica:</h4>
+                        <p>"Transformamos sus operaciones domiciliarias con nuestra plataforma digital, optimizando cada paso, desde la agenda hasta el reporte."</p>
+                    </div>
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Reducción de Carga Administrativa:</h4>
+                        <p>"Diga adiós a los dolores de cabeza de la facturación. Nuestro equipo especializado asegura un flujo de ingresos ágil y preciso."</p>
+                    </div>
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Escalabilidad Sostenible:</h4>
+                        <p>"Preparamos a Tenua para crecer. Nuestra infraestructura soporta la expansión de sus servicios sin sacrificar calidad ni control."</p>
+                    </div>
+                    <div class="p-4 rounded-md bg-[#e0f2f1]">
+                        <h4 class="font-semibold mb-1 text-gray-700">Liderazgo y Administración del Proyecto:</h4>
+                        <p>"Asumimos la responsabilidad de la gestión administrativa y tecnológica, ofreciendo una gobernanza clara y resultados medibles."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="subsection-title">3.2 Servicios Detallados de HMM Global</h3>
+                <div class="space-y-8 text-lg">
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-700 mb-2">Gestión de Facturación y Reclamos a Axa:</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Procesamiento completo del ciclo de facturación y cobro.</li>
+                            <li>Generación y presentación de reclamos conforme a protocolos Axa.</li>
+                            <li>Seguimiento proactivo de reclamos (aclaraciones, rechazos, apelaciones).</li>
+                            <li>Conciliación de pagos.</li>
+                            <li>Garantía de cumplimiento normativo y políticas Axa.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-700 mb-2">Software de Control de Operaciones y Visitas Domiciliarias (Plataforma HMM Global):</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Módulo de agendamiento y asignación optimizada de visitas.</li>
+                            <li>Funcionalidades para seguimiento en tiempo real (configurable).</li>
+                            <li>Registro digital centralizado (historia clínica, notas de evolución).</li>
+                            <li>Portal de comunicación eficiente (Tenua, profesionales, HMM).</li>
+                            <li>Generación de informes y analíticas (KPIs: visitas, productividad).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-700 mb-2">Know-How y Soporte en la Gestión del Proyecto:</h4>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Transferencia de conocimiento y mejores prácticas (experiencia Axa).</li>
+                            <li>Asesoramiento en la estructuración de la oferta para pacientes geriátricos.</li>
+                            <li>Soporte integral en configuración y administración operativa.</li>
+                            <li>Capacitación en software HMM y protocolos Axa.</li>
+                            <li>Liderazgo y supervisión de la ejecución administrativa y tecnológica.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: METODOLOGÍA Y PLAN DE IMPLEMENTACIÓN -->
+    <section id="metodologia" class="py-12 md:py-20 section-bg-neutral-light">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Metodología y Plan de Implementación</h2>
+                <div class="space-y-8 text-lg">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Fase 1: Diagnóstico y Configuración Inicial</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Reuniones de alineación con Tenua para entender flujos de trabajo.</li>
+                            <li>Configuración de la plataforma HMM Global adaptada a Tenua y Axa.</li>
+                            <li>Establecimiento de protocolos de comunicación y reporte.</li>
+                            <li>Definición detallada de procesos de facturación y reclamos para Axa.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Fase 2: Capacitación y Puesta en Marcha</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Capacitación exhaustiva al personal de Tenua y fisioterapeutas.</li>
+                            <li>Entrenamiento en gestión de reclamos y documentación para Axa.</li>
+                            <li>Lanzamiento piloto (si aplica) o inicio gradual de operaciones.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Fase 3: Operación Continua y Optimización</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Gestión diaria de facturación, reclamos y operaciones vía plataforma HMM.</li>
+                            <li>Soporte técnico y funcional continuo.</li>
+                            <li>Monitorización de KPIs y reuniones periódicas de revisión.</li>
+                            <li>Identificación de oportunidades de mejora y optimización constante.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Comunicación y Gobernanza:</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Establecimiento de un gerente de cuenta principal en HMM Global.</li>
+                            <li>Informes periódicos de desempeño y resultados financieros del proyecto.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 5: MODELO COMERCIAL Y TÉRMINOS -->
+    <section id="modelo-comercial" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Modelo Comercial y Términos</h2>
+                <p class="text-lg mb-4">Nuestra colaboración se basa en un <strong>modelo de éxito compartido</strong>, demostrando nuestro compromiso con la rentabilidad y eficiencia del proyecto.</p>
+                <p class="text-lg mb-2"><strong>Inversión de HMM Global:</strong> Aportamos nuestra plataforma tecnológica, equipo especializado en gestión de reclamos y operaciones, y nuestro valioso <em>know-how</em> y experiencia con Axa.</p>
+                <p class="text-lg mb-4"><strong>Participación de HMM Global:</strong> Por la prestación integral de los servicios de liderazgo, administración, gestión de facturación y reclamos a Axa, la provisión del software y la transferencia de <em>know-how</em>, HMM Global percibirá el <strong>70% de la utilidad bruta</strong> generada por la operación del proyecto.</p>
+                <p class="text-lg mb-2"><strong>Definición de Utilidad Bruta:</strong> Ingresos totales facturados y efectivamente cobrados a Axa por los servicios de fisioterapia prestados por Tenua, menos los costos directos incurridos por Tenua exclusivamente en la prestación de dichos servicios (ej. honorarios acordados de fisioterapeutas por sesión, materiales directos indispensables y previamente definidos). Esta definición será detallada y formalizada en el contrato de colaboración.</p>
+                <p class="text-lg mb-4"><strong>Transparencia:</strong> Se establecerán mecanismos de reporte transparente para el cálculo de la utilidad bruta.</p>
+                <p class="text-lg"><strong>Duración del Acuerdo:</strong> Se propone un acuerdo inicial de 2 años, revisable anualmente para asegurar la continua alineación de objetivos.</p>
+                
+                <!-- Simulador de Colaboración -->
+                <div class="mt-10 pt-8 border-t border-gray-200">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-6 text-center">Simulador de Colaboración</h4>
+                    <div class="max-w-md mx-auto bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <div class="mb-5">
+                            <label for="grossProfit" class="block text-sm font-medium text-gray-700 mb-1">Ingrese la Utilidad Bruta Estimada del Proyecto ($ USD):</label>
+                            <input type="number" id="grossProfit" name="grossProfit" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#5cc4bc] focus:border-[#5cc4bc] sm:text-sm" placeholder="Ej: 50000">
+                        </div>
+                        <div class="space-y-4 text-lg">
+                            <div class="flex justify-between items-center p-4 bg-white rounded-md shadow">
+                                <span class="font-medium text-gray-600">Participación HMM Global (70%):</span>
+                                <span id="hmmShare" class="font-bold text-[#5cc4bc] text-xl">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center p-4 bg-white rounded-md shadow">
+                                <span class="font-medium text-gray-600">Utilidad Neta para Tenua (30%):</span>
+                                <span id="tenuaNetProfit" class="font-bold text-gray-800 text-xl">$0.00</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-neutral-main mt-6 text-center">Este es un cálculo estimado y no contractual. La definición final de utilidad bruta se detallará en el contrato.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 6: BENEFICIOS CLAVE PARA TENUA -->
+    <section id="beneficios" class="py-12 md:py-20 section-bg-neutral-light">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Beneficios Clave para Tenua</h2>
+                <div class="grid md:grid-cols-2 gap-x-8 gap-y-6 text-lg">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Maximización del Enfoque Clínico:</strong> Su equipo se concentra en la excelencia fisioterapéutica, nosotros en la eficiencia administrativa.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Optimización de Ingresos:</strong> Mejora en ciclos de cobro y reducción de rechazos de Axa gracias a nuestra gestión experta.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Reducción de Costos Operativos:</strong> Disminución de inversión en personal administrativo y software especializado para Axa.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Eficiencia y Control Operacional:</strong> Visibilidad completa y control optimizado de operaciones domiciliarias con nuestra plataforma.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Mitigación de Riesgos:</strong> Reducción de errores en facturación y cumplimiento asegurado con políticas Axa.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Acceso a Tecnología de Punta:</strong> Uso de una plataforma digital probada sin inversión en desarrollo propio.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Soporte Estratégico:</strong> Un socio con experiencia que entiende el ecosistema Axa y le guía hacia el éxito.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-[#5cc4bc] flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <p><strong>Crecimiento Acelerado:</strong> Capacidad para escalar sus servicios a más pacientes de Axa de forma estructurada y rentable.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 7: ACERCA DE HMM GLOBAL -->
+    <section id="acerca-de" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="card">
+                <h2 class="section-title">Acerca de HMM Global</h2>
+                <div class="text-center mb-8">
+                     <img src="https://ik.imagekit.io/50wnllxkw/Logo%20HMM.png?updatedAt=1748999183605" alt="[Imagen del Logo de HMM Global]" class="h-20 mx-auto mb-4" onerror="this.onerror=null;this.src='https://placehold.co/200x80/e0f2f1/333333?text=HMM+Global';">
+                </div>
+                <p class="text-lg mb-4">HMM Global es una empresa líder en la transformación digital de la gestión de servicios de salud domiciliaria.</p>
+                <p class="text-lg mb-2"><strong>Nuestra Misión:</strong> Conectar de manera eficiente a pacientes, profesionales de la salud y entidades financiadoras, mejorando la calidad de la atención y la eficiencia operativa.</p>
+                <p class="text-lg mb-2"><strong>Nuestra Experiencia:</strong></p>
+                <ul class="list-disc pl-5 mb-4 space-y-1 text-lg">
+                    <li>Especialistas en la optimización de la liquidación de prestaciones médicas y flujos de ingresos para proveedores de salud.</li>
+                    <li>Proveemos soluciones tecnológicas que integran digitalmente a todos los actores de la cadena de valor del cuidado domiciliario.</li>
+                    <li>Contamos con experiencia demostrable en la mejora de la eficiencia, el compromiso y el soporte en la gestión de cuidados domiciliarios, colaborando con diversos actores del sector.</li>
+                </ul>
+                <p class="text-lg"><strong>Nuestro Compromiso:</strong> Estamos comprometidos con la innovación y la excelencia para facilitar el éxito de nuestros socios como Tenua.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 8: PRÓXIMOS PASOS Y LLAMADA A LA ACCIÓN -->
+    <section id="contacto" class="py-12 md:py-20 bg-[#5cc4bc] text-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Próximos Pasos</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Esperamos que esta propuesta demuestre el valor significativo que una alianza con HMM Global puede aportar a Tenua en su proyecto con Axa. Estamos listos para discutir esta propuesta en detalle y responder cualquier pregunta que puedan tener.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 text-lg">
+                <div class="bg-[#4aa9a1] p-4 rounded-lg shadow-lg">
+                    <h4 class="font-semibold mb-1">1. Reunión de Seguimiento</h4>
+                    <p class="text-sm text-gray-100">Discutir la propuesta y aclarar dudas.</p>
+                </div>
+                <div class="bg-[#4aa9a1] p-4 rounded-lg shadow-lg">
+                    <h4 class="font-semibold mb-1">2. Sesión de Demostración</h4>
+                    <p class="text-sm text-gray-100">Demostración en vivo de nuestra plataforma.</p>
+                </div>
+                <div class="bg-[#4aa9a1] p-4 rounded-lg shadow-lg">
+                    <h4 class="font-semibold mb-1">3. Ajuste de la Propuesta</h4>
+                    <p class="text-sm text-gray-100">Basados en su retroalimentación.</p>
+                </div>
+                <div class="bg-[#4aa9a1] p-4 rounded-lg shadow-lg">
+                    <h4 class="font-semibold mb-1">4. Acuerdo Formal</h4>
+                    <p class="text-sm text-gray-100">Avanzar hacia la formalización.</p>
+                </div>
+            </div>
+            <a href="mailto:dacevedo@hmmglobal.com?subject=Propuesta%20Colaboración%20Tenua%20-%20HMM%20Global&body=Estimado%20equipo%20de%20HMM%20Global,%0D%0A%0D%0AEstamos%20interesados%20en%20discutir%20la%20propuesta%20de%20colaboración%20y%20nos%20gustaría%20agendar%20una%20reunión.%0D%0A%0D%0ASaludos%20cordiales,%0D%0A[Su%20Nombre%20y%20Cargo%20en%20Tenua]"
+               class="bg-white hover:bg-gray-100 text-[#5cc4bc] font-bold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-0.5 text-xl inline-block">
+                Agendar Reunión
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#333333] text-gray-300 py-8 text-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <p>&copy; <span id="currentYear"></span> HMM Global. Todos los derechos reservados.</p>
+            <p class="text-sm text-gray-400">Propuesta preparada para Tenua.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Script para el menú móvil
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        const mobileNavLinks = mobileMenu.querySelectorAll('a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Script para el año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Script para el Simulador de Colaboración
+        const grossProfitInput = document.getElementById('grossProfit');
+        const hmmShareDisplay = document.getElementById('hmmShare');
+        const tenuaNetProfitDisplay = document.getElementById('tenuaNetProfit');
+
+        if (grossProfitInput && hmmShareDisplay && tenuaNetProfitDisplay) {
+            grossProfitInput.addEventListener('input', function() {
+                const grossProfitValue = this.value.trim();
+                if (grossProfitValue === '' || isNaN(parseFloat(grossProfitValue))) {
+                    hmmShareDisplay.textContent = '$0.00';
+                    tenuaNetProfitDisplay.textContent = '$0.00';
+                    return;
+                }
+                
+                const grossProfit = parseFloat(grossProfitValue);
+
+                if (grossProfit < 0) { 
+                    hmmShareDisplay.textContent = '$0.00';
+                    tenuaNetProfitDisplay.textContent = '$0.00';
+                    return;
+                }
+
+                const hmmShare = grossProfit * 0.70;
+                const tenuaNetProfit = grossProfit * 0.30;
+
+                // Formateador para moneda USD en inglés (formato común para USD)
+                const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                hmmShareDisplay.textContent = formatter.format(hmmShare);
+                tenuaNetProfitDisplay.textContent = formatter.format(tenuaNetProfit);
+            });
+        }
+    </script>
+
+</body>
+</html>

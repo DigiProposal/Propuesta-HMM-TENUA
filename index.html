@@ -26,8 +26,11 @@
         .list-disc li {
             @apply mb-2;
         }
-        .primary-button {
-            @apply bg-[#5cc4bc] hover:bg-[#4aa9a1] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5; /* Color primario para botones */
+        .primary-button { /* Estilo para botones principales (turquesa) */
+            @apply bg-[#5cc4bc] hover:bg-[#4aa9a1] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5;
+        }
+        .hero-button { /* Nuevo estilo para el botón del hero con alto contraste */
+            @apply bg-white hover:bg-gray-100 text-[#5cc4bc] font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5;
         }
         nav a {
             @apply text-gray-600 hover:text-[#5cc4bc] px-3 py-2 rounded-md text-sm font-medium transition-colors; /* Color primario para hover en nav */
@@ -54,6 +57,42 @@
         }
         .benefit-item { /* Para los ítems de Beneficios */
             @apply flex items-start space-x-3 p-3 rounded-md transition-all duration-300 ease-in-out hover:bg-white hover:shadow-md;
+        }
+        /* Estilos para el slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 5px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #5cc4bc;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #5cc4bc;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -111,7 +150,7 @@
                 <img src="https://ik.imagekit.io/50wnllxkw/Recurso-2fastx.png?updatedAt=1748996121775" alt="[Imagen del Logo de Tenua]" class="h-16 md:h-20" onerror="this.onerror=null;this.src='https://placehold.co/150x60/2c6b66/FFFFFF?text=Logo+Tenua';">
             </div>
             <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                Propuesta de Colaboración Estratégica:
+                Propuesta de Colaboración Estratégica
             </h1>
             <h2 class="text-2xl md:text-3xl font-semibold text-[#5cc4bc] mb-6">
                 Gestión Integral para Servicios de Fisioterapia Domiciliaria a Pacientes Geriátricos de Axa.
@@ -119,12 +158,8 @@
             <p class="text-xl text-gray-200 mb-10">
                 HMM Global y Tenua: Uniendo fuerzas para optimizar la atención y la rentabilidad.
             </p>
-            <div class="text-sm text-gray-300 mb-4">
-                <p><strong>Dirigido a:</strong> Dr. Juan Osorio, Líder de Tenua.</p>
-                <p><strong>Preparado por:</strong> HMM Global</p>
-                <p><strong>Fecha:</strong> 4 de junio de 2025</p>
-            </div>
-            <a href="#resumen" class="primary-button text-lg">
+            <!-- Texto de Dirigido a, Preparado por y Fecha eliminado -->
+            <a href="#resumen" class="hero-button text-lg"> <!-- Clase de botón actualizada -->
                 Descubra Cómo
             </a>
         </div>
@@ -144,7 +179,7 @@
                     <li>Optimización superior de la eficiencia operativa y tecnológica.</li>
                     <li>Potenciamos su éxito y rentabilidad en el proyecto con Axa.</li>
                 </ul>
-                <p class="text-lg mb-6">Nos alineamos con su éxito: HMM Global opera bajo un modelo de beneficio compartido, percibiendo un 70% de la utilidad bruta del proyecto.</p>
+                <p class="text-lg mb-6">Nos alineamos con su éxito: HMM Global opera bajo un modelo de beneficio compartido, percibiendo un 75% de la utilidad bruta del proyecto.</p>
                 <p class="text-lg text-center font-medium">Explore en detalle cómo esta alianza transformará los desafíos en oportunidades de crecimiento para Tenua.</p>
             </div>
         </div>
@@ -292,7 +327,7 @@
                 <h2 class="section-title">Nuestra Alianza Comercial: Términos Claros</h2>
                 <p class="text-lg mb-4">Creemos en una colaboración donde el éxito es mutuo. Nuestro modelo comercial refleja este compromiso con la rentabilidad y eficiencia del proyecto.</p>
                 <p class="text-lg mb-2"><strong>La Aportación de HMM Global:</strong> Ponemos a su disposición nuestra avanzada plataforma tecnológica, un equipo altamente especializado en gestión de reclamos y operaciones, y nuestro valioso <em>know-how</em> y experiencia consolidada con Axa.</p>
-                <p class="text-lg mb-4"><strong>Participación en el Éxito:</strong> Por la prestación integral de nuestros servicios —liderazgo, administración, gestión de facturación y reclamos a Axa, provisión de software y transferencia de conocimiento— HMM Global participará con el <strong>70% de la utilidad bruta</strong> generada por la operación del proyecto.</p>
+                <p class="text-lg mb-4"><strong>Participación en el Éxito:</strong> Por la prestación integral de nuestros servicios —liderazgo, administración, gestión de facturación y reclamos a Axa, provisión de software y transferencia de conocimiento— HMM Global participará con el <strong>75% de la utilidad bruta</strong> generada por la operación del proyecto.</p>
                 <p class="text-lg mb-2"><strong>Definición Clara de Utilidad Bruta:</strong> Se calculará como los ingresos totales facturados y efectivamente cobrados a Axa por los servicios de fisioterapia de Tenua, menos los costos directos incurridos por Tenua (ej. honorarios de fisioterapeutas, materiales indispensables). Esta definición se formalizará detalladamente en nuestro contrato.</p>
                 <p class="text-lg mb-4"><strong>Transparencia Total:</strong> Implementaremos mecanismos de reporte claros y accesibles para el cálculo de la utilidad bruta.</p>
                 <p class="text-lg"><strong>Horizonte del Acuerdo:</strong> Proponemos un acuerdo inicial de 2 años, con revisiones anuales para asegurar la continua alineación y optimización de nuestros objetivos conjuntos.</p>
@@ -300,18 +335,18 @@
                 <!-- Simulador de Colaboración -->
                 <div class="mt-10 pt-8 border-t border-gray-200">
                     <h4 class="text-xl font-semibold text-gray-700 mb-6 text-center">Proyecte Su Rentabilidad: Simulador de Colaboración</h4>
-                    <div class="max-w-md mx-auto bg-gray-50 p-6 rounded-lg shadow-inner">
+                    <div class="max-w-lg mx-auto bg-gray-50 p-6 rounded-lg shadow-inner">
                         <div class="mb-5">
-                            <label for="grossProfit" class="block text-sm font-medium text-gray-700 mb-1">Ingrese la Utilidad Bruta Estimada del Proyecto ($ USD):</label>
-                            <input type="number" id="grossProfit" name="grossProfit" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#5cc4bc] focus:border-[#5cc4bc] sm:text-sm" placeholder="Ej: 50000">
+                            <label for="grossProfitSlider" class="block text-sm font-medium text-gray-700 mb-2">Utilidad Bruta Estimada del Proyecto ($ USD): <span id="sliderValueDisplay" class="font-bold text-[#5cc4bc]">$50,000.00</span></label>
+                            <input type="range" id="grossProfitSlider" name="grossProfitSlider" min="0" max="200000" value="50000" step="1000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                         </div>
                         <div class="space-y-4 text-lg">
                             <div class="flex justify-between items-center p-4 bg-white rounded-md shadow">
-                                <span class="font-medium text-gray-600">Participación HMM Global (70%):</span>
+                                <span class="font-medium text-gray-600">Participación HMM Global (75%):</span>
                                 <span id="hmmShare" class="font-bold text-[#5cc4bc] text-xl">$0.00</span>
                             </div>
                             <div class="flex justify-between items-center p-4 bg-white rounded-md shadow">
-                                <span class="font-medium text-gray-600">Utilidad Neta para Tenua (30%):</span>
+                                <span class="font-medium text-gray-600">Utilidad Neta para Tenua (25%):</span>
                                 <span id="tenuaNetProfit" class="font-bold text-gray-800 text-xl">$0.00</span>
                             </div>
                         </div>
@@ -445,36 +480,31 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         // Script para el Simulador de Colaboración
-        const grossProfitInput = document.getElementById('grossProfit');
+        const grossProfitSlider = document.getElementById('grossProfitSlider');
+        const sliderValueDisplay = document.getElementById('sliderValueDisplay');
         const hmmShareDisplay = document.getElementById('hmmShare');
         const tenuaNetProfitDisplay = document.getElementById('tenuaNetProfit');
 
-        if (grossProfitInput && hmmShareDisplay && tenuaNetProfitDisplay) {
-            grossProfitInput.addEventListener('input', function() {
-                const grossProfitValue = this.value.trim();
-                if (grossProfitValue === '' || isNaN(parseFloat(grossProfitValue))) {
-                    hmmShareDisplay.textContent = '$0.00';
-                    tenuaNetProfitDisplay.textContent = '$0.00';
-                    return;
-                }
-                
-                const grossProfit = parseFloat(grossProfitValue);
+        // Formateador para moneda USD en inglés (formato común para USD)
+        const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                if (grossProfit < 0) { 
-                    hmmShareDisplay.textContent = '$0.00';
-                    tenuaNetProfitDisplay.textContent = '$0.00';
-                    return;
-                }
+        function updateSimulatorValues() {
+            const grossProfit = parseFloat(grossProfitSlider.value);
 
-                const hmmShare = grossProfit * 0.70;
-                const tenuaNetProfit = grossProfit * 0.30;
+            sliderValueDisplay.textContent = formatter.format(grossProfit);
 
-                // Formateador para moneda USD en inglés (formato común para USD)
-                const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const hmmShare = grossProfit * 0.75; // Actualizado a 75%
+            const tenuaNetProfit = grossProfit * 0.25; // Actualizado a 25%
 
-                hmmShareDisplay.textContent = formatter.format(hmmShare);
-                tenuaNetProfitDisplay.textContent = formatter.format(tenuaNetProfit);
-            });
+            hmmShareDisplay.textContent = formatter.format(hmmShare);
+            tenuaNetProfitDisplay.textContent = formatter.format(tenuaNetProfit);
+        }
+
+        if (grossProfitSlider && sliderValueDisplay && hmmShareDisplay && tenuaNetProfitDisplay) {
+            // Inicializar valores al cargar la página
+            updateSimulatorValues();
+            
+            grossProfitSlider.addEventListener('input', updateSimulatorValues);
         }
     </script>
 
